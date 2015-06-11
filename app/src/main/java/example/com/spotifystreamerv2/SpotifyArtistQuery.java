@@ -26,6 +26,7 @@ public class SpotifyArtistQuery extends AsyncTask<String, Void, ArtistsPager> {
 
     @Override
     protected void onPostExecute(ArtistsPager artistsPager) {
+        //ArtistFragment.setArrayOfArtists(artistsPager.artists.items);
         List<Artist> artistList = artistsPager.artists.items;
         ArtistFragment.getmCustomListAdapter().clear();
         String artistName;

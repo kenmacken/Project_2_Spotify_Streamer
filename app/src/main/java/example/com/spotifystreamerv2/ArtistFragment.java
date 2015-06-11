@@ -1,5 +1,6 @@
 package example.com.spotifystreamerv2;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -65,6 +68,16 @@ public class ArtistFragment extends Fragment {
         setmCustomListAdapter(new CustomListAdapter(getActivity(), getArrayOfArtists()));
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist);
         listView.setAdapter(getmCustomListAdapter());
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(), "item clicked: " + adapterView.getItemAtPosition(i), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), TopTenActivity.class);
+                intent.putExtra("ARTIST_ID", getmCustomListAdapter().getItem(i).artistId);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
