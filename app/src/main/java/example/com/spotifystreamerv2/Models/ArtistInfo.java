@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamerv2.Models;
 
 /**
  * Created by ken on 10/06/2015.

@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamerv2.Fragments;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -15,13 +15,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import example.com.spotifystreamerv2.Adapters.ArtistListAdapter;
+import example.com.spotifystreamerv2.Models.ArtistInfo;
+import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
+import example.com.spotifystreamerv2.TopTenActivity;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ArtistFragment extends Fragment {
     private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<ArtistInfo>();
-    private static CustomListAdapter mCustomListAdapter;
+    private static ArtistListAdapter mArtistListAdapter;
 
     public ArtistFragment() {
     }
@@ -30,12 +36,12 @@ public class ArtistFragment extends Fragment {
         return arrayOfArtists;
     }
 
-    public static CustomListAdapter getmCustomListAdapter() {
-        return mCustomListAdapter;
+    public static ArtistListAdapter getmArtistListAdapter() {
+        return mArtistListAdapter;
     }
 
-    public static void setmCustomListAdapter(CustomListAdapter mCustomListAdapter) {
-        ArtistFragment.mCustomListAdapter = mCustomListAdapter;
+    public static void setmArtistListAdapter(ArtistListAdapter mArtistListAdapter) {
+        ArtistFragment.mArtistListAdapter = mArtistListAdapter;
     }
 
     @Override
@@ -65,16 +71,17 @@ public class ArtistFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_search, container);
 
-        setmCustomListAdapter(new CustomListAdapter(getActivity(), getArrayOfArtists()));
+        setmArtistListAdapter(new ArtistListAdapter(getActivity(), getArrayOfArtists()));
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist);
-        listView.setAdapter(getmCustomListAdapter());
+        listView.setAdapter(getmArtistListAdapter());
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getActivity(), "item clicked: " + adapterView.getItemAtPosition(i), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), TopTenActivity.class);
-                intent.putExtra("ARTIST_ID", getmCustomListAdapter().getItem(i).artistId);
+                intent.putExtra("ARTIST_ID", getmArtistListAdapter().getItem(i).artistId);
+                intent.putExtra("ARTIST_NAME", getmArtistListAdapter().getItem(i).artistName);
                 startActivity(intent);
             }
         });

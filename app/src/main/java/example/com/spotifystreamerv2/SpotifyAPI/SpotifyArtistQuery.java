@@ -1,10 +1,11 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamerv2.SpotifyAPI;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
+import example.com.spotifystreamerv2.Fragments.ArtistFragment;
+import example.com.spotifystreamerv2.Models.ArtistInfo;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
@@ -28,7 +29,7 @@ public class SpotifyArtistQuery extends AsyncTask<String, Void, ArtistsPager> {
     protected void onPostExecute(ArtistsPager artistsPager) {
         //ArtistFragment.setArrayOfArtists(artistsPager.artists.items);
         List<Artist> artistList = artistsPager.artists.items;
-        ArtistFragment.getmCustomListAdapter().clear();
+        ArtistFragment.getmArtistListAdapter().clear();
         String artistName;
         String artistImgUrl;
         String artistId;
@@ -40,7 +41,7 @@ public class SpotifyArtistQuery extends AsyncTask<String, Void, ArtistsPager> {
                 artistImgUrl = artistList.get(i).images.get(0).url;
             }
             artistId = artistList.get(i).id;
-            ArtistFragment.getmCustomListAdapter().add(new ArtistInfo(artistName, artistImgUrl, artistId));
+            ArtistFragment.getmArtistListAdapter().add(new ArtistInfo(artistName, artistImgUrl, artistId));
         }
     }
 }
