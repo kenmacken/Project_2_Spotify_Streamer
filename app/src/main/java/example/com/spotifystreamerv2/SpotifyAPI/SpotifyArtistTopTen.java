@@ -39,17 +39,19 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
         String albumName;
         String trackId;
         String albumImgUrl;
+        String previewUrl;
         for(int i = 0; i < topTenTracks.tracks.size(); i++) {
             Track currentTrack = topTenTracks.tracks.get(i);
             trackName = currentTrack.name;
             trackId = currentTrack.id;
             albumName = currentTrack.album.name;
+            previewUrl = currentTrack.preview_url;
             if(currentTrack.album.images.isEmpty()) {
                 albumImgUrl = "";
             } else {
                 albumImgUrl = currentTrack.album.images.get(0).url;
             }
-            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl));
+            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl, "test"));
         }
         //super.onPostExecute(tracks);
     }

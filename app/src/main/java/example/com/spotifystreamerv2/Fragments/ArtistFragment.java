@@ -78,7 +78,7 @@ public class ArtistFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), "item clicked: " + adapterView.getItemAtPosition(i), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "item clicked: " + adapterView.getItemAtPosition(i), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), TopTenActivity.class);
                 intent.putExtra("ARTIST_ID", getmArtistListAdapter().getItem(i).artistId);
                 intent.putExtra("ARTIST_NAME", getmArtistListAdapter().getItem(i).artistName);

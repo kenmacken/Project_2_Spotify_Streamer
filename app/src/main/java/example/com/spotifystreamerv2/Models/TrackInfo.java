@@ -8,11 +8,15 @@ public class TrackInfo {
     public String trackId;
     public String albumName;
     public String albumImgUrl;
+    public String previewUrl;
+    public String artistName;
 
-    public TrackInfo(String trackName, String trackId, String albumName, String albumImgUrl) {
+    public TrackInfo(String trackName, String trackId, String albumName, String albumImgUrl, String previewUrl, String artistName) {
         this.trackName = trackName;
         this.trackId = trackId;
         this.albumName = albumName;
         this.albumImgUrl = albumImgUrl;
+        this.previewUrl = previewUrl;
+        this.artistName = artistName;
     }
 }
