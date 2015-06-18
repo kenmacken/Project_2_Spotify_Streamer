@@ -1,6 +1,5 @@
 package example.com.spotifystreamerv2.SpotifyAPI;
 
-
 import android.os.AsyncTask;
 
 import java.util.HashMap;
@@ -51,7 +50,7 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
             } else {
                 albumImgUrl = currentTrack.album.images.get(0).url;
             }
-            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl, "test"));
+            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl));
         }
         //super.onPostExecute(tracks);
     }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.R;
 
-
 /**
  * Created by ken on 10/06/2015.
  */

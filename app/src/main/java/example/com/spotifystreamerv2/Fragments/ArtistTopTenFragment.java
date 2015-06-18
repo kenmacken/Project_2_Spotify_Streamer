@@ -1,9 +1,11 @@
 package example.com.spotifystreamerv2.Fragments;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +16,22 @@ import java.util.ArrayList;
 
 import example.com.spotifystreamerv2.Adapters.TopTenListAdapter;
 import example.com.spotifystreamerv2.MediaPlayerActivity;
+import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistTopTen;
 
 /**
  * Created by ken on 11/06/2015.
  */
 public class ArtistTopTenFragment extends Fragment {
+
     private static ArrayList<TrackInfo> arrayOfTracks = new ArrayList<>();
     private static TopTenListAdapter mTopTenListAdapter;
+    private OnTrackSelectedListener trackListener;
 
-    public ArtistTopTenFragment() {
+    public interface OnTrackSelectedListener {
+        public void onTrackSelected(TrackInfo track);
     }
 
     public static TopTenListAdapter getmTopTenListAdapter() {
@@ -35,24 +42,28 @@ public class ArtistTopTenFragment extends Fragment {
         ArtistTopTenFragment.mTopTenListAdapter = mTopTenListAdapter;
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_artist_top_ten, container);
-
+        View rootView = inflater.inflate(R.layout.fragment_artist_top_ten, container, false);
+        Log.d("frag", "filly");
+        Bundle arguments = getArguments();
+        if(arguments != null) {
+            ArtistInfo artist = (ArtistInfo) arguments.getSerializable("artist");
+            Log.d("frag", "fosp");
+            if(artist != null) {
+                SpotifyArtistTopTen mSpotifyArtistTopTen = new SpotifyArtistTopTen();
+                mSpotifyArtistTopTen.execute(artist.artistId);
+            }
+        }
+        //
         setmTopTenListAdapter(new TopTenListAdapter(getActivity(), arrayOfTracks));
         ListView listView = (ListView) rootView.findViewById(R.id.listview_artist_top_ten);
         listView.setAdapter(getmTopTenListAdapter());
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), MediaPlayerActivity.class);
-                intent.putExtra("ALBUM_NAME", getmTopTenListAdapter().getItem(i).albumName);
-                intent.putExtra("TRACK_NAME", getmTopTenListAdapter().getItem(i).trackName);
-                intent.putExtra("PREVIEW_URL", getmTopTenListAdapter().getItem(i).previewUrl);
-                intent.putExtra("IMAGE_URL", getmTopTenListAdapter().getItem(i).albumImgUrl);
-                startActivity(intent);
+                TrackInfo track = getmTopTenListAdapter().getItem(i);
+                trackListener.onTrackSelected(track);
             }
         });
         return rootView;

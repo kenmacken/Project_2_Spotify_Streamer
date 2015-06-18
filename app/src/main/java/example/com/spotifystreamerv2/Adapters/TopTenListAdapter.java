@@ -27,7 +27,7 @@ public class TopTenListAdapter extends ArrayAdapter<TrackInfo> {
         this.mContext = mContext;
     }
 
-    @Override
+    //@Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TrackInfo track = getItem(position);
         if(convertView == null) {

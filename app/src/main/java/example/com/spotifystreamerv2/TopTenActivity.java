@@ -1,32 +1,43 @@
 package example.com.spotifystreamerv2;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistTopTen;
+import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamerv2.Models.ArtistInfo;
+import example.com.spotifystreamerv2.Models.TrackInfo;
 
 /**
  * Created by ken on 11/06/2015.
  */
-public class TopTenActivity extends AppCompatActivity {
+public class TopTenActivity extends FragmentActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
     private final String TAG = "TopTenActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_ten);
-        Log.d(TAG, "intent data: " + getIntent().getExtras());
-        if(getIntent().getExtras() != null) {
-            String artistId = getIntent().getExtras().getString("ARTIST_ID");
-            String artistName = getIntent().getExtras().getString("ARTIST_NAME");
-            getSupportActionBar().setSubtitle(artistName);
-
-            SpotifyArtistTopTen mSpotifyArtistTopTen = new SpotifyArtistTopTen();
-            mSpotifyArtistTopTen.execute(artistId);
+        //
+        ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
+        //
+        if(savedInstanceState == null) {
+            Log.d(TAG, "loading fragment");
+            Bundle arguments = new Bundle();
+            arguments.putSerializable("artist", artist);
+            ArtistTopTenFragment fragment = new ArtistTopTenFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container_TopTen, fragment)
+                    .commit();
         }
+    }
 
+    @Override
+    public void onTrackSelected(TrackInfo track) {
+        Intent intent = new Intent(this, MediaPlayerActivity.class);
+        intent.putExtra("track", track);
+        startActivity(intent);
     }
 }
