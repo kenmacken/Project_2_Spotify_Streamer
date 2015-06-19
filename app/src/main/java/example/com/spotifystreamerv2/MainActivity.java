@@ -2,6 +2,7 @@ package example.com.spotifystreamerv2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,14 +13,16 @@ import android.widget.EditText;
 
 import example.com.spotifystreamerv2.Fragments.ArtistFragment;
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
+import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
 
-public class MainActivity extends FragmentActivity implements ArtistFragment.OnArtistSelectedListener {
+public class MainActivity extends FragmentActivity implements ArtistFragment.OnArtistSelectedListener, ArtistTopTenFragment.OnTrackSelectedListener {
+    private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
+    private final String TAG = "MainActivity";
     private EditText artistSearch;
     private boolean isTwoPane = false;
-    private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +56,15 @@ public class MainActivity extends FragmentActivity implements ArtistFragment.OnA
     }
 
     private void determinePaneLayout(Bundle savedInstanceState) {
-        if(findViewById(R.id.container_TopTen) != null) {
+        if (findViewById(R.id.container_TopTen) != null) {
             isTwoPane = true;
-            Log.d("tablet: ", "true");
-            if(savedInstanceState == null) {
-                Log.d("tablet", "fun");
+            if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_TopTen, new ArtistTopTenFragment(), TOPTENFRAGMENT_TAG)
                         .commit();
             }
         } else {
             isTwoPane = false;
-            Log.d("tablet: ", "false");
         }
     }
 
@@ -85,10 +85,7 @@ public class MainActivity extends FragmentActivity implements ArtistFragment.OnA
 
     @Override
     public void onArtistSelected(ArtistInfo artist) {
-        Log.d("Artist Selected", "yes");
-        if(isTwoPane) {
-            //
-            Log.d("dilly", "dally");
+        if (isTwoPane) {
             Bundle args = new Bundle();
             args.putSerializable("artist", artist);
             ArtistTopTenFragment fragment = new ArtistTopTenFragment();
@@ -101,5 +98,25 @@ public class MainActivity extends FragmentActivity implements ArtistFragment.OnA
             intent.putExtra("artist", artist);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onTrackSelected(TrackInfo track) {
+        Log.d(TAG, "track selected");
+        if (isTwoPane) {
+            showMediaPlayerPopup(track);
+        } else {
+            Intent intent = new Intent(this, MediaPlayerActivity.class);
+            intent.putExtra("track", track);
+            startActivity(intent);
+        }
+    }
+
+    public void showMediaPlayerPopup(TrackInfo track) {
+        Bundle args = new Bundle();
+        args.putSerializable("track", track);
+        DialogFragment dialog = new MediaPlayerFragment();
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), "MediaPlayerFragment");
     }
 }

@@ -23,7 +23,6 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
         ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
         //
         if(savedInstanceState == null) {
-            Log.d(TAG, "loading fragment");
             Bundle arguments = new Bundle();
             arguments.putSerializable("artist", artist);
             ArtistTopTenFragment fragment = new ArtistTopTenFragment();
@@ -36,6 +35,7 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
 
     @Override
     public void onTrackSelected(TrackInfo track) {
+        Log.d(TAG, "track selected Acti");
         Intent intent = new Intent(this, MediaPlayerActivity.class);
         intent.putExtra("track", track);
         startActivity(intent);

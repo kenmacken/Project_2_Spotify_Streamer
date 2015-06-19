@@ -43,13 +43,23 @@ public class ArtistTopTenFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(activity instanceof OnTrackSelectedListener) {
+            trackListener = (OnTrackSelectedListener) activity;
+        } else {
+            throw new ClassCastException(
+                    activity.toString() + " must implement TopTenFragment.OnTrackSelectedListener"
+            );
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_top_ten, container, false);
-        Log.d("frag", "filly");
         Bundle arguments = getArguments();
         if(arguments != null) {
             ArtistInfo artist = (ArtistInfo) arguments.getSerializable("artist");
-            Log.d("frag", "fosp");
             if(artist != null) {
                 SpotifyArtistTopTen mSpotifyArtistTopTen = new SpotifyArtistTopTen();
                 mSpotifyArtistTopTen.execute(artist.artistId);
@@ -63,6 +73,7 @@ public class ArtistTopTenFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TrackInfo track = getmTopTenListAdapter().getItem(i);
+                Log.d("artistInfoA", "track: " + track.trackName);
                 trackListener.onTrackSelected(track);
             }
         });
