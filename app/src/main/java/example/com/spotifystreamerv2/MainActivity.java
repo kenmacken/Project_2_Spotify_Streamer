@@ -104,19 +104,12 @@ public class MainActivity extends FragmentActivity implements ArtistFragment.OnA
     public void onTrackSelected(TrackInfo track) {
         Log.d(TAG, "track selected");
         if (isTwoPane) {
-            showMediaPlayerPopup(track);
-        } else {
-            Intent intent = new Intent(this, MediaPlayerActivity.class);
-            intent.putExtra("track", track);
-            startActivity(intent);
+            Bundle args = new Bundle();
+            args.putSerializable("track", track);
+            args.putBoolean("large", true);
+            MediaPlayerFragment fragment = MediaPlayerFragment.newInstance();
+            fragment.setArguments(args);
+            fragment.show(getSupportFragmentManager(), "tablet");
         }
-    }
-
-    public void showMediaPlayerPopup(TrackInfo track) {
-        Bundle args = new Bundle();
-        args.putSerializable("track", track);
-        DialogFragment dialog = new MediaPlayerFragment();
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), "MediaPlayerFragment");
     }
 }

@@ -35,7 +35,7 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
 
     @Override
     public void onTrackSelected(TrackInfo track) {
-        Log.d(TAG, "track selected Acti");
+        Log.d(TAG, "track selected: " + track.trackName);
         Intent intent = new Intent(this, MediaPlayerActivity.class);
         intent.putExtra("track", track);
         startActivity(intent);

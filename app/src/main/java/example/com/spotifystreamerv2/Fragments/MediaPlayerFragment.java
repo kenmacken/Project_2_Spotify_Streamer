@@ -33,15 +33,24 @@ import example.com.spotifystreamerv2.R;
  */
 public class MediaPlayerFragment extends DialogFragment {
 
+    private static final String ARG_SHOW_AS_DIALOG = "DetailedFragment.ARG_SHOW_AS_DIALOG";
+    private final String TAG = "MediaPlayerFragment";
+
     String artistName;
     String albumName;
     String trackName;
     String previewUrl;
     String albumImgUrl;
-
     Button btn_play_pause;
+    Button btn_previous;
+    Button btn_next;
     SeekBar sb_trackSeek;
     TextView tv_trackEnd;
+    TextView tv_artist;
+    TextView tv_track;
+    TextView tv_album;
+    ImageView iv_albumImage;
+    TextView tv_trackStart;
     boolean playing = false;
     boolean paused = false;
     private Handler myHandler = new Handler();
@@ -49,15 +58,28 @@ public class MediaPlayerFragment extends DialogFragment {
     private WifiManager.WifiLock wifiLock;
     private Runnable updateTrackTime;
 
-    public interface OnCallback {
-        public void onCallback();
+    public static MediaPlayerFragment newInstance(boolean showAsDialog) {
+        Log.d("whatup", "testre");
+        MediaPlayerFragment fragment = new MediaPlayerFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_SHOW_AS_DIALOG, showAsDialog);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public MediaPlayerFragment(){}
+    public static MediaPlayerFragment newInstance() {
+        return newInstance(true);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        boolean b = args.getBoolean("large");
+        /*if(b) {
+            setShowsDialog(b);
+        }*/
+        //
         updateTrackTime = new Runnable() {
             @Override
             public void run() {
@@ -68,25 +90,24 @@ public class MediaPlayerFragment extends DialogFragment {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-
             }
         };
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_media_player, null);
-        TextView tv_artist = (TextView) view.findViewById(R.id.textView_artistName);
-        TextView tv_track = (TextView) view.findViewById(R.id.textView_trackName);
-        TextView tv_album = (TextView) view.findViewById(R.id.textView_albumName);
-        ImageView iv_albumImage = (ImageView) view.findViewById(R.id.imageView_album);
-        sb_trackSeek = (SeekBar) view.findViewById(R.id.seekBar_track);
-        TextView tv_trackStart = (TextView) view.findViewById(R.id.textView_trackStart);
-        tv_trackEnd = (TextView) view.findViewById(R.id.textView_trackEnd);
-        Button btn_previous = (Button) view.findViewById(R.id.button_previous);
-        btn_play_pause = (Button) view.findViewById(R.id.button_play);
-        Button btn_next = (Button) view.findViewById(R.id.button_next);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_media_player, container, false);
 
+        tv_artist = (TextView) view.findViewById(R.id.textView_artistName);
+        tv_track = (TextView) view.findViewById(R.id.textView_trackName);
+        tv_album = (TextView) view.findViewById(R.id.textView_albumName);
+        iv_albumImage = (ImageView) view.findViewById(R.id.imageView_album);
+        sb_trackSeek = (SeekBar) view.findViewById(R.id.seekBar_track);
+        tv_trackStart = (TextView) view.findViewById(R.id.textView_trackStart);
+        tv_trackEnd = (TextView) view.findViewById(R.id.textView_trackEnd);
+        btn_previous = (Button) view.findViewById(R.id.button_previous);
+        btn_play_pause = (Button) view.findViewById(R.id.button_play);
+        btn_next = (Button) view.findViewById(R.id.button_next);
         btn_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,8 +117,8 @@ public class MediaPlayerFragment extends DialogFragment {
 
         Bundle arguments = getArguments();
         if(arguments != null) {
-            Log.d("testy", "test test");
             TrackInfo track = (TrackInfo) arguments.getSerializable("track");
+            Log.d(TAG, "track selected: " + track);
             albumName = track.albumName;
             trackName = track.trackName;
             previewUrl = track.previewUrl;
@@ -108,10 +129,7 @@ public class MediaPlayerFragment extends DialogFragment {
             Picasso.with(getActivity()).load(albumImgUrl).resize(640, 640).centerCrop().into(iv_albumImage);
             playTrack(true);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view);
-
-        return builder.create();
+        return view;
     }
 
     @Override
