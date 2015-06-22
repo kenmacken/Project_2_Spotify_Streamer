@@ -1,39 +1,25 @@
 package example.com.spotifystreamerv2.Fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import example.com.spotifystreamerv2.Adapters.ArtistListAdapter;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.R;
-import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
-import example.com.spotifystreamerv2.TopTenActivity;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ArtistFragment extends Fragment {
-    private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<ArtistInfo>();
+    private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<>();
     private static ArtistListAdapter mArtistListAdapter;
     private OnArtistSelectedListener artistListener;
-
-    public interface OnArtistSelectedListener {
-        public void onArtistSelected(ArtistInfo artist);
-    }
 
     public static ArrayList<ArtistInfo> getArrayOfArtists() {
         return arrayOfArtists;
@@ -50,7 +36,7 @@ public class ArtistFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if(activity instanceof OnArtistSelectedListener) {
+        if (activity instanceof OnArtistSelectedListener) {
             artistListener = (OnArtistSelectedListener) activity;
         } else {
             throw new ClassCastException(
@@ -81,5 +67,9 @@ public class ArtistFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    public interface OnArtistSelectedListener {
+        void onArtistSelected(ArtistInfo artist);
     }
 }

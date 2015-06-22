@@ -9,9 +9,6 @@ import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 
-/**
- * Created by ken on 11/06/2015.
- */
 public class TopTenActivity extends FragmentActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
     private final String TAG = "TopTenActivity";
     private String artistName;
@@ -21,6 +18,7 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_ten);
         //
+        Log.d(TAG, "onCreate");
         ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
         artistName = artist.artistName;
         //

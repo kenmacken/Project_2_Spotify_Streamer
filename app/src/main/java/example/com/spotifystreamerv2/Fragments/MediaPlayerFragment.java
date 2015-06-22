@@ -28,9 +28,6 @@ import java.util.concurrent.TimeUnit;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.R;
 
-/**
- * Created by ken on 15/06/2015.
- */
 public class MediaPlayerFragment extends DialogFragment {
 
     private static final String ARG_SHOW_AS_DIALOG = "DetailedFragment.ARG_SHOW_AS_DIALOG";
@@ -53,16 +50,11 @@ public class MediaPlayerFragment extends DialogFragment {
     ImageView iv_albumImage;
     TextView tv_trackStart;
     boolean playing = false;
-    boolean paused = false;
     private Handler myHandler = new Handler();
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private WifiManager.WifiLock wifiLock;
     private Runnable updateTrackTime;
     private OnChangeTrackListener changeTrackListener;
-
-    public interface OnChangeTrackListener {
-        public void onTrackSelected(int trackSelected);
-    }
 
     public static MediaPlayerFragment newInstance(boolean showAsDialog) {
         Log.d("whatup", "testre");
@@ -81,11 +73,7 @@ public class MediaPlayerFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        boolean b = args.getBoolean("large");
         artistName = args.getString("artist");
-        /*if(b) {
-            setShowsDialog(b);
-        }*/
         //
         /*updateTrackTime = new Runnable() {
             @Override
@@ -104,7 +92,7 @@ public class MediaPlayerFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if(activity instanceof OnChangeTrackListener) {
+        if (activity instanceof OnChangeTrackListener) {
             changeTrackListener = (OnChangeTrackListener) activity;
         } else {
             throw new ClassCastException(
@@ -136,7 +124,7 @@ public class MediaPlayerFragment extends DialogFragment {
 
 
         Bundle arguments = getArguments();
-        if(arguments != null) {
+        if (arguments != null) {
             TrackInfo track = (TrackInfo) arguments.getSerializable("track");
             Log.d(TAG, "track selected: " + track);
             Log.d(TAG, "track number: " + track.trackNumber);
@@ -156,7 +144,7 @@ public class MediaPlayerFragment extends DialogFragment {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nextTrack()) {
+                if (nextTrack()) {
                     changeTrackListener.onTrackSelected(trackNumber + 1);
                 }
             }
@@ -166,7 +154,7 @@ public class MediaPlayerFragment extends DialogFragment {
         btn_previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(previousTrack()) {
+                if (previousTrack()) {
                     changeTrackListener.onTrackSelected(trackNumber - 1);
                 }
             }
@@ -196,7 +184,7 @@ public class MediaPlayerFragment extends DialogFragment {
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
-                    sb_trackSeek.setMax((int) mediaPlayer.getDuration());
+                    sb_trackSeek.setMax(mediaPlayer.getDuration());
                     tv_trackEnd.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()), TimeUnit.MILLISECONDS.toSeconds(mediaPlayer.getDuration())));
                     pauseTrack(false);
 
@@ -210,7 +198,7 @@ public class MediaPlayerFragment extends DialogFragment {
                         int trackTime = mediaPlayer.getCurrentPosition();
                         sb_trackSeek.setProgress(trackTime);
                         myHandler.postDelayed(this, 100);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -238,7 +226,7 @@ public class MediaPlayerFragment extends DialogFragment {
     }
 
     private boolean nextTrack() {
-        if(ArtistTopTenFragment.getmTopTenListAdapter().getCount() > trackNumber + 1) {
+        if (ArtistTopTenFragment.getmTopTenListAdapter().getCount() > trackNumber + 1) {
             stopTrack();
             try {
                 getDialog().dismiss();
@@ -252,7 +240,7 @@ public class MediaPlayerFragment extends DialogFragment {
     }
 
     private boolean previousTrack() {
-        if(trackNumber > 0) {
+        if (trackNumber > 0) {
             stopTrack();
             try {
                 getDialog().dismiss();
@@ -269,5 +257,9 @@ public class MediaPlayerFragment extends DialogFragment {
         mediaPlayer.stop();
         wifiLock.release();
         playing = false;
+    }
+
+    public interface OnChangeTrackListener {
+        void onTrackSelected(int trackSelected);
     }
 }

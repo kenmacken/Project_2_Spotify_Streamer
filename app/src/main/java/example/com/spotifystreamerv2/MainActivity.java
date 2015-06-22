@@ -2,11 +2,7 @@ package example.com.spotifystreamerv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import example.com.spotifystreamerv2.Adapters.ArtistListAdapter;
-import example.com.spotifystreamerv2.Adapters.TopTenListAdapter;
 import example.com.spotifystreamerv2.Fragments.ArtistFragment;
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
@@ -26,16 +20,16 @@ import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
 public class MainActivity extends FragmentActivity implements ArtistFragment.OnArtistSelectedListener, ArtistTopTenFragment.OnTrackSelectedListener, MediaPlayerFragment.OnChangeTrackListener {
     private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
     private final String TAG = "MainActivity";
-    private EditText artistSearch;
     private boolean isTwoPane = false;
     private String artistName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         determinePaneLayout(savedInstanceState);
-        artistSearch = (EditText) findViewById(R.id.editText_artistSearch);
+        EditText artistSearch = (EditText) findViewById(R.id.editText_artistSearch);
         artistSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

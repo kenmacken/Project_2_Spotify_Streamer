@@ -2,9 +2,7 @@ package example.com.spotifystreamerv2.Fragments;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +13,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import example.com.spotifystreamerv2.Adapters.TopTenListAdapter;
-import example.com.spotifystreamerv2.MediaPlayerActivity;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.R;
 import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistTopTen;
 
-/**
- * Created by ken on 11/06/2015.
- */
 public class ArtistTopTenFragment extends Fragment {
 
     private static ArrayList<TrackInfo> arrayOfTracks = new ArrayList<>();
@@ -31,7 +25,7 @@ public class ArtistTopTenFragment extends Fragment {
     private OnTrackSelectedListener trackListener;
 
     public interface OnTrackSelectedListener {
-        public void onTrackSelected(int trackSelected);
+        void onTrackSelected(int trackSelected);
     }
 
     public static TopTenListAdapter getmTopTenListAdapter() {
