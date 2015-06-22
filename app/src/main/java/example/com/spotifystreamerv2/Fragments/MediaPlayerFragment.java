@@ -1,7 +1,6 @@
 package example.com.spotifystreamerv2.Fragments;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.PowerManager;
@@ -19,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,6 +41,7 @@ public class MediaPlayerFragment extends DialogFragment {
     String trackName;
     String previewUrl;
     String albumImgUrl;
+    int trackNumber;
     Button btn_play_pause;
     Button btn_previous;
     Button btn_next;
@@ -57,6 +58,11 @@ public class MediaPlayerFragment extends DialogFragment {
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private WifiManager.WifiLock wifiLock;
     private Runnable updateTrackTime;
+    private OnChangeTrackListener changeTrackListener;
+
+    public interface OnChangeTrackListener {
+        public void onTrackSelected(int trackSelected);
+    }
 
     public static MediaPlayerFragment newInstance(boolean showAsDialog) {
         Log.d("whatup", "testre");
@@ -76,11 +82,12 @@ public class MediaPlayerFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         boolean b = args.getBoolean("large");
+        artistName = args.getString("artist");
         /*if(b) {
             setShowsDialog(b);
         }*/
         //
-        updateTrackTime = new Runnable() {
+        /*updateTrackTime = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -91,7 +98,19 @@ public class MediaPlayerFragment extends DialogFragment {
                     e.printStackTrace();
                 }
             }
-        };
+        };*/
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(activity instanceof OnChangeTrackListener) {
+            changeTrackListener = (OnChangeTrackListener) activity;
+        } else {
+            throw new ClassCastException(
+                    activity.toString() + " must implement MediaPlayerFragment.OnChangeTrackListener"
+            );
+        }
     }
 
     @Override
@@ -107,7 +126,7 @@ public class MediaPlayerFragment extends DialogFragment {
         tv_trackEnd = (TextView) view.findViewById(R.id.textView_trackEnd);
         btn_previous = (Button) view.findViewById(R.id.button_previous);
         btn_play_pause = (Button) view.findViewById(R.id.button_play);
-        btn_next = (Button) view.findViewById(R.id.button_next);
+
         btn_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,10 +134,13 @@ public class MediaPlayerFragment extends DialogFragment {
             }
         });
 
+
         Bundle arguments = getArguments();
         if(arguments != null) {
             TrackInfo track = (TrackInfo) arguments.getSerializable("track");
             Log.d(TAG, "track selected: " + track);
+            Log.d(TAG, "track number: " + track.trackNumber);
+            trackNumber = track.trackNumber;
             albumName = track.albumName;
             trackName = track.trackName;
             previewUrl = track.previewUrl;
@@ -127,25 +149,47 @@ public class MediaPlayerFragment extends DialogFragment {
             tv_track.setText(trackName);
             tv_album.setText(albumName);
             Picasso.with(getActivity()).load(albumImgUrl).resize(640, 640).centerCrop().into(iv_albumImage);
-            playTrack(true);
+            playTrack(previewUrl);
         }
+
+        btn_next = (Button) view.findViewById(R.id.button_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(nextTrack()) {
+                    changeTrackListener.onTrackSelected(trackNumber + 1);
+                }
+            }
+        });
+
+        btn_next = (Button) view.findViewById(R.id.button_next);
+        btn_previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(previousTrack()) {
+                    changeTrackListener.onTrackSelected(trackNumber - 1);
+                }
+            }
+        });
         return view;
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroy() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
-            wifiLock.release();
+            if (wifiLock.isHeld()) {
+                wifiLock.release();
+            }
         }
-        super.onDestroyView();
+        super.onDestroy();
     }
 
-    private void playTrack(boolean play) {
+    private void playTrack(String songUrl) {
         try {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(previewUrl);
+            mediaPlayer.setDataSource(songUrl);
             mediaPlayer.setWakeMode(getActivity(), PowerManager.PARTIAL_WAKE_LOCK);
             wifiLock = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
             wifiLock.acquire();
@@ -159,6 +203,18 @@ public class MediaPlayerFragment extends DialogFragment {
                 }
             });
             mediaPlayer.prepareAsync();
+            updateTrackTime = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        int trackTime = mediaPlayer.getCurrentPosition();
+                        sb_trackSeek.setProgress(trackTime);
+                        myHandler.postDelayed(this, 100);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
         } catch (IOException e) {
             //
             playing = false;
@@ -179,5 +235,39 @@ public class MediaPlayerFragment extends DialogFragment {
             btn_play_pause.setBackgroundResource(android.R.drawable.ic_media_pause);
             myHandler.postDelayed(updateTrackTime, 100);
         }
+    }
+
+    private boolean nextTrack() {
+        if(ArtistTopTenFragment.getmTopTenListAdapter().getCount() > trackNumber + 1) {
+            stopTrack();
+            try {
+                getDialog().dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        Toast.makeText(getActivity(), "No more tracks", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private boolean previousTrack() {
+        if(trackNumber > 0) {
+            stopTrack();
+            try {
+                getDialog().dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        Toast.makeText(getActivity(), "No more tracks", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private void stopTrack() {
+        mediaPlayer.stop();
+        wifiLock.release();
+        playing = false;
     }
 }

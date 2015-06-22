@@ -12,12 +12,14 @@ public class TrackInfo implements Serializable {
     public String albumName;
     public String albumImgUrl;
     public String previewUrl;
+    public int trackNumber;
 
-    public TrackInfo(String trackName, String trackId, String albumName, String albumImgUrl, String previewUrl) {
+    public TrackInfo(String trackName, String trackId, String albumName, String albumImgUrl, String previewUrl, int trackNumber) {
         this.trackName = trackName;
         this.trackId = trackId;
         this.albumName = albumName;
         this.albumImgUrl = albumImgUrl;
         this.previewUrl = previewUrl;
+        this.trackNumber = trackNumber;
     }
 }

@@ -14,6 +14,7 @@ import example.com.spotifystreamerv2.Models.TrackInfo;
  */
 public class TopTenActivity extends FragmentActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
     private final String TAG = "TopTenActivity";
+    private String artistName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
         setContentView(R.layout.activity_top_ten);
         //
         ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
+        artistName = artist.artistName;
         //
         if(savedInstanceState == null) {
             Bundle arguments = new Bundle();
@@ -34,10 +36,12 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
     }
 
     @Override
-    public void onTrackSelected(TrackInfo track) {
+    public void onTrackSelected(int trackNumber) {
+        TrackInfo track = ArtistTopTenFragment.getmTopTenListAdapter().getItem(trackNumber);
         Log.d(TAG, "track selected: " + track.trackName);
         Intent intent = new Intent(this, MediaPlayerActivity.class);
         intent.putExtra("track", track);
+        intent.putExtra("artist", artistName);
         startActivity(intent);
     }
 }

@@ -31,7 +31,7 @@ public class ArtistTopTenFragment extends Fragment {
     private OnTrackSelectedListener trackListener;
 
     public interface OnTrackSelectedListener {
-        public void onTrackSelected(TrackInfo track);
+        public void onTrackSelected(int trackSelected);
     }
 
     public static TopTenListAdapter getmTopTenListAdapter() {
@@ -74,7 +74,7 @@ public class ArtistTopTenFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TrackInfo track = getmTopTenListAdapter().getItem(i);
                 Log.d("artistInfoA", "track: " + track.trackName);
-                trackListener.onTrackSelected(track);
+                trackListener.onTrackSelected(i);
             }
         });
         return rootView;

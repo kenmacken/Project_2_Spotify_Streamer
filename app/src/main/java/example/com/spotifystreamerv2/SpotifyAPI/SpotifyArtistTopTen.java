@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import example.com.spotifystreamerv2.Adapters.ArtistListAdapter;
 import example.com.spotifystreamerv2.Adapters.TopTenListAdapter;
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -39,8 +41,10 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
         String trackId;
         String albumImgUrl;
         String previewUrl;
+        int trackNumber;
         for(int i = 0; i < topTenTracks.tracks.size(); i++) {
             Track currentTrack = topTenTracks.tracks.get(i);
+            trackNumber = i;
             trackName = currentTrack.name;
             trackId = currentTrack.id;
             albumName = currentTrack.album.name;
@@ -50,7 +54,7 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
             } else {
                 albumImgUrl = currentTrack.album.images.get(0).url;
             }
-            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl));
+            ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl, trackNumber));
         }
         //super.onPostExecute(tracks);
     }
