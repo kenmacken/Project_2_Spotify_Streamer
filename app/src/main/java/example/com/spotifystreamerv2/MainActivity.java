@@ -3,6 +3,7 @@ package example.com.spotifystreamerv2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +18,7 @@ import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
 
-public class MainActivity extends FragmentActivity implements ArtistFragment.OnArtistSelectedListener, ArtistTopTenFragment.OnTrackSelectedListener, MediaPlayerFragment.OnChangeTrackListener {
+public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistTopTenFragment.OnTrackSelectedListener, MediaPlayerFragment.OnChangeTrackListener {
     private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
     private final String TAG = "MainActivity";
     private boolean isTwoPane = false;

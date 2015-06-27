@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
 
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
@@ -41,5 +42,12 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
         intent.putExtra("track", track);
         intent.putExtra("artist", artistName);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 }
