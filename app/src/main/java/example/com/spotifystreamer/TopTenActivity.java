@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 
-import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
-import example.com.spotifystreamerv2.Models.ArtistInfo;
-import example.com.spotifystreamerv2.Models.TrackInfo;
+import example.com.spotifystreamer.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamer.Models.ArtistInfo;
+import example.com.spotifystreamer.Models.TrackInfo;
 
 public class TopTenActivity extends AppCompatActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
     private final String TAG = "TopTenActivity";
@@ -21,7 +21,7 @@ public class TopTenActivity extends AppCompatActivity implements ArtistTopTenFra
         //
         Log.d(TAG, "onCreate");
         ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
-        artistName = artist.artistName;
+        artistName = artist.getArtistName();
         //
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();

@@ -1,10 +1,8 @@
-package example.com.spotifystreamerv2.Fragments;
+package example.com.spotifystreamer.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.PowerManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
@@ -25,8 +23,8 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import example.com.spotifystreamerv2.Models.TrackInfo;
-import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamer.Models.TrackInfo;
+import example.com.spotifystreamer.R;
 
 public class MediaPlayerFragment extends DialogFragment {
 

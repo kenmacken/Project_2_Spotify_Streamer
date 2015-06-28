@@ -1,22 +1,19 @@
-package example.com.spotifystreamerv2.Fragments;
+package example.com.spotifystreamer.Fragments;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import example.com.spotifystreamerv2.Adapters.ArtistListAdapter;
-import example.com.spotifystreamerv2.Models.ArtistInfo;
-import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamer.Adapters.ArtistListAdapter;
+import example.com.spotifystreamer.Models.ArtistInfo;
+import example.com.spotifystreamer.R;
 
 public class ArtistFragment extends Fragment {
     private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<>();
@@ -46,7 +43,7 @@ public class ArtistFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ArtistInfo artist = mArtistListAdapter.getItem(i);
-                Log.d("artistInfoA", "artist: " + artist.artistName);
+                Log.d("artistInfoA", "artist: " + artist.getArtistName());
                 ((OnArtistSelectedListener) getActivity()).onArtistSelected(artist);
             }
         });

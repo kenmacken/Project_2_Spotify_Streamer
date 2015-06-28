@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2.Adapters;
+package example.com.spotifystreamer.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import example.com.spotifystreamerv2.Models.ArtistInfo;
-import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamer.Models.ArtistInfo;
+import example.com.spotifystreamer.R;
 
 /**
  * Created by ken on 10/06/2015.
@@ -34,9 +34,9 @@ public class ArtistListAdapter extends ArrayAdapter<ArtistInfo> {
         }
         TextView txtTitle = (TextView) convertView.findViewById(R.id.list_item_artist_textview);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_artist_image_view);
-        txtTitle.setText(artist.artistName);
-        if(!artist.artistImgUrl.isEmpty()) {
-            Picasso.with(mContext).load(artist.artistImgUrl).resize(250,250).centerCrop().into(imageView);
+        txtTitle.setText(artist.getArtistName());
+        if(!artist.getArtistImgUrl().isEmpty()) {
+            Picasso.with(mContext).load(artist.getArtistImgUrl()).resize(250,250).centerCrop().into(imageView);
         }
         return convertView;
     }

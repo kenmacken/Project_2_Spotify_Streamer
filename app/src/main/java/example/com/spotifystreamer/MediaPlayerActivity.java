@@ -1,14 +1,12 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamer;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
-import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
-import example.com.spotifystreamerv2.Models.TrackInfo;
+import example.com.spotifystreamer.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamer.Fragments.MediaPlayerFragment;
+import example.com.spotifystreamer.Models.TrackInfo;
 
 public class MediaPlayerActivity extends AppCompatActivity implements MediaPlayerFragment.OnChangeTrackListener {
 

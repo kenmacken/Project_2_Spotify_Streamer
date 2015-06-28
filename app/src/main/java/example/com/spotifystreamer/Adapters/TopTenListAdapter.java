@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2.Adapters;
+package example.com.spotifystreamer.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import example.com.spotifystreamerv2.Models.TrackInfo;
-import example.com.spotifystreamerv2.R;
+import example.com.spotifystreamer.Models.TrackInfo;
+import example.com.spotifystreamer.R;
 
 /**
  * Created by ken on 11/06/2015.

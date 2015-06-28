@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2.Fragments;
+package example.com.spotifystreamer.Fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,15 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import example.com.spotifystreamerv2.Adapters.TopTenListAdapter;
-import example.com.spotifystreamerv2.Models.ArtistInfo;
-import example.com.spotifystreamerv2.Models.TrackInfo;
-import example.com.spotifystreamerv2.R;
-import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistTopTen;
+import example.com.spotifystreamer.Adapters.TopTenListAdapter;
+import example.com.spotifystreamer.Models.ArtistInfo;
+import example.com.spotifystreamer.Models.TrackInfo;
+import example.com.spotifystreamer.R;
+import example.com.spotifystreamer.SpotifyAPI.SpotifyArtistTopTen;
 
 public class ArtistTopTenFragment extends Fragment {
 
@@ -40,7 +39,7 @@ public class ArtistTopTenFragment extends Fragment {
             ArtistInfo artist = (ArtistInfo) arguments.getSerializable("artist");
             if(artist != null) {
                 SpotifyArtistTopTen mSpotifyArtistTopTen = new SpotifyArtistTopTen();
-                mSpotifyArtistTopTen.execute(artist.artistId);
+                mSpotifyArtistTopTen.execute(artist.getArtistId());
             }
         }
         //

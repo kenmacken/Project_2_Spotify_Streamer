@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2.Models;
+package example.com.spotifystreamer.Models;
 
 import java.io.Serializable;
 

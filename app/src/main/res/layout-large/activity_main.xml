@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_ArtistList"
-        android:name="example.com.spotifystreamerv2.Fragments.ArtistFragment"
+        android:name="example.com.spotifystreamer.Fragments.ArtistFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

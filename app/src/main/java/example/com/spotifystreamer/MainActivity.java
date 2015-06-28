@@ -1,4 +1,4 @@
-package example.com.spotifystreamerv2;
+package example.com.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,15 +8,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
-import example.com.spotifystreamerv2.Fragments.ArtistFragment;
-import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
-import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
-import example.com.spotifystreamerv2.Models.ArtistInfo;
-import example.com.spotifystreamerv2.Models.TrackInfo;
-import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
-import example.com.spotifystreamerv2.Fragments.ArtistFragment.OnArtistSelectedListener;
-import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment.OnTrackSelectedListener;
-import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment.OnChangeTrackListener;
+import example.com.spotifystreamer.Fragments.ArtistFragment;
+import example.com.spotifystreamer.Fragments.ArtistTopTenFragment;
+import example.com.spotifystreamer.Fragments.MediaPlayerFragment;
+import example.com.spotifystreamer.Models.ArtistInfo;
+import example.com.spotifystreamer.Models.TrackInfo;
+import example.com.spotifystreamer.SpotifyAPI.SpotifyArtistQuery;
+import example.com.spotifystreamer.Fragments.ArtistFragment.OnArtistSelectedListener;
+import example.com.spotifystreamer.Fragments.ArtistTopTenFragment.OnTrackSelectedListener;
+import example.com.spotifystreamer.Fragments.MediaPlayerFragment.OnChangeTrackListener;
 
 public class MainActivity extends AppCompatActivity implements OnArtistSelectedListener, OnTrackSelectedListener, OnChangeTrackListener {
     private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements OnArtistSelectedL
     @Override
     public void onArtistSelected(ArtistInfo artist) {
         if (isTwoPane) {
-            artistName = artist.artistName;
+            artistName = artist.getArtistName();
             getSupportActionBar().setSubtitle(artistName);
             Bundle args = new Bundle();
             args.putSerializable("artist", artist);
