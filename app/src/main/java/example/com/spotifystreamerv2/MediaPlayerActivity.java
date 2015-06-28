@@ -3,13 +3,14 @@ package example.com.spotifystreamerv2;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 
-public class MediaPlayerActivity extends ActionBarActivity implements MediaPlayerFragment.OnChangeTrackListener {
+public class MediaPlayerActivity extends AppCompatActivity implements MediaPlayerFragment.OnChangeTrackListener {
 
     private final String TAG = "MediaPlayerActivity";
     private String artistName;
@@ -24,7 +25,7 @@ public class MediaPlayerActivity extends ActionBarActivity implements MediaPlaye
         if (savedInstanceState == null) {
             Log.d(TAG, "track data: " + track);
             artistName = getIntent().getStringExtra("artist");
-            ((ActionBarActivity)this).getSupportActionBar().setSubtitle(artistName);
+            getSupportActionBar().setSubtitle(artistName);
             Bundle arguments = new Bundle();
             arguments.putSerializable("track", track);
             arguments.putBoolean("large", false);

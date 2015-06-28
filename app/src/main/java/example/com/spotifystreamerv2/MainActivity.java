@@ -1,9 +1,8 @@
 package example.com.spotifystreamerv2;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,7 +18,7 @@ import example.com.spotifystreamerv2.Fragments.ArtistFragment.OnArtistSelectedLi
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment.OnTrackSelectedListener;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment.OnChangeTrackListener;
 
-public class MainActivity extends ActionBarActivity implements OnArtistSelectedListener, OnTrackSelectedListener, OnChangeTrackListener {
+public class MainActivity extends AppCompatActivity implements OnArtistSelectedListener, OnTrackSelectedListener, OnChangeTrackListener {
     private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
     private final String TAG = "MainActivity";
     private boolean isTwoPane = false;
@@ -46,8 +45,8 @@ public class MainActivity extends ActionBarActivity implements OnArtistSelectedL
                 String artist = editable.toString();
                 SpotifyArtistQuery mSpotifyArtistQuery = new SpotifyArtistQuery();
                 mSpotifyArtistQuery.execute(artist + "*");
-                ArtistTopTenFragment.getmTopTenListAdapter().clear();
                 ArtistFragment.getLvArtists().clearChoices();
+                getSupportActionBar().setSubtitle("");
             }
         });
     }
@@ -69,7 +68,7 @@ public class MainActivity extends ActionBarActivity implements OnArtistSelectedL
     public void onArtistSelected(ArtistInfo artist) {
         if (isTwoPane) {
             artistName = artist.artistName;
-            ((ActionBarActivity)this).getSupportActionBar().setSubtitle(artistName);
+            getSupportActionBar().setSubtitle(artistName);
             Bundle args = new Bundle();
             args.putSerializable("artist", artist);
             ArtistTopTenFragment fragment = new ArtistTopTenFragment();

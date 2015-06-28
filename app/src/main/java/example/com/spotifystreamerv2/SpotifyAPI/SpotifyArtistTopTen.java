@@ -35,7 +35,7 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
     @Override
     protected void onPostExecute(Tracks tracks) {
         Tracks topTenTracks = tracks;
-        ArtistTopTenFragment.getmTopTenListAdapter().clear();
+        //ArtistTopTenFragment.getmTopTenListAdapter().clear();
         String trackName;
         String albumName;
         String trackId;
