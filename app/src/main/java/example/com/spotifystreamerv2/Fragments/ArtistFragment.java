@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -19,6 +20,11 @@ import example.com.spotifystreamerv2.R;
 public class ArtistFragment extends Fragment {
     private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<>();
     private static ArtistListAdapter mArtistListAdapter;
+    private static ListView lvArtists;
+
+    public static ListView getLvArtists() {
+        return lvArtists;
+    }
 
     public interface OnArtistSelectedListener {
         void onArtistSelected(ArtistInfo artist);
@@ -33,7 +39,7 @@ public class ArtistFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_artist_search, container, false);
         //
         mArtistListAdapter = new ArtistListAdapter(getActivity(), arrayOfArtists);
-        ListView lvArtists = (ListView) rootView.findViewById(R.id.listview_artist);
+        lvArtists = (ListView) rootView.findViewById(R.id.listview_artist);
         lvArtists.setAdapter(mArtistListAdapter);
         lvArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

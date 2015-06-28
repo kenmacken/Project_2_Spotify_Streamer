@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
+import example.com.spotifystreamerv2.Fragments.ArtistFragment;
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
@@ -46,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements OnArtistSelectedL
                 SpotifyArtistQuery mSpotifyArtistQuery = new SpotifyArtistQuery();
                 mSpotifyArtistQuery.execute(artist + "*");
                 ArtistTopTenFragment.getmTopTenListAdapter().clear();
+                ArtistFragment.getLvArtists().clearChoices();
             }
         });
     }
