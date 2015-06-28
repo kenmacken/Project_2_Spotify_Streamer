@@ -56,6 +56,5 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
             }
             ArtistTopTenFragment.getmTopTenListAdapter().add(new TrackInfo(trackName, trackId, albumName, albumImgUrl, previewUrl, trackNumber));
         }
-        //super.onPostExecute(tracks);
     }
 }

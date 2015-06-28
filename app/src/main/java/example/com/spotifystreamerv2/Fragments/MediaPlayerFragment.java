@@ -30,7 +30,6 @@ import example.com.spotifystreamerv2.R;
 
 public class MediaPlayerFragment extends DialogFragment {
 
-    private static final String ARG_SHOW_AS_DIALOG = "DetailedFragment.ARG_SHOW_AS_DIALOG";
     private final String TAG = "MediaPlayerFragment";
 
     String artistName;
@@ -54,14 +53,9 @@ public class MediaPlayerFragment extends DialogFragment {
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private WifiManager.WifiLock wifiLock;
     private Runnable updateTrackTime;
-    private OnChangeTrackListener changeTrackListener;
 
     public static MediaPlayerFragment newInstance(boolean showAsDialog) {
-        Log.d("whatup", "testre");
         MediaPlayerFragment fragment = new MediaPlayerFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(ARG_SHOW_AS_DIALOG, showAsDialog);
-        fragment.setArguments(args);
         return fragment;
     }
 

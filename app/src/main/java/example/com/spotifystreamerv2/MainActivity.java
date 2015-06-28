@@ -1,12 +1,12 @@
 package example.com.spotifystreamerv2;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
@@ -45,6 +45,7 @@ public class MainActivity extends ActionBarActivity implements OnArtistSelectedL
                 String artist = editable.toString();
                 SpotifyArtistQuery mSpotifyArtistQuery = new SpotifyArtistQuery();
                 mSpotifyArtistQuery.execute(artist + "*");
+                ArtistTopTenFragment.getmTopTenListAdapter().clear();
             }
         });
     }
@@ -66,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements OnArtistSelectedL
     public void onArtistSelected(ArtistInfo artist) {
         if (isTwoPane) {
             artistName = artist.artistName;
+            ((ActionBarActivity)this).getSupportActionBar().setSubtitle(artistName);
             Bundle args = new Bundle();
             args.putSerializable("artist", artist);
             ArtistTopTenFragment fragment = new ArtistTopTenFragment();

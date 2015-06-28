@@ -24,6 +24,7 @@ public class MediaPlayerActivity extends ActionBarActivity implements MediaPlaye
         if (savedInstanceState == null) {
             Log.d(TAG, "track data: " + track);
             artistName = getIntent().getStringExtra("artist");
+            ((ActionBarActivity)this).getSupportActionBar().setSubtitle(artistName);
             Bundle arguments = new Bundle();
             arguments.putSerializable("track", track);
             arguments.putBoolean("large", false);
