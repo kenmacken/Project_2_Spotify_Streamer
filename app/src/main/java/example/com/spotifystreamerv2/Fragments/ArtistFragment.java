@@ -19,57 +19,30 @@ import example.com.spotifystreamerv2.R;
 public class ArtistFragment extends Fragment {
     private static ArrayList<ArtistInfo> arrayOfArtists = new ArrayList<>();
     private static ArtistListAdapter mArtistListAdapter;
-    private OnArtistSelectedListener artistListener;
 
-    public static ArrayList<ArtistInfo> getArrayOfArtists() {
-        return arrayOfArtists;
+    public interface OnArtistSelectedListener {
+        void onArtistSelected(ArtistInfo artist);
     }
 
     public static ArtistListAdapter getmArtistListAdapter() {
         return mArtistListAdapter;
     }
 
-    public static void setmArtistListAdapter(ArtistListAdapter mArtistListAdapter) {
-        ArtistFragment.mArtistListAdapter = mArtistListAdapter;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnArtistSelectedListener) {
-            artistListener = (OnArtistSelectedListener) activity;
-        } else {
-            throw new ClassCastException(
-                    activity.toString() + " must implement ArtistFragment.OnArtistSelectedListener"
-            );
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_search, container, false);
         //
-        setmArtistListAdapter(new ArtistListAdapter(getActivity(), getArrayOfArtists()));
+        mArtistListAdapter = new ArtistListAdapter(getActivity(), arrayOfArtists);
         ListView lvArtists = (ListView) rootView.findViewById(R.id.listview_artist);
-        lvArtists.setAdapter(getmArtistListAdapter());
+        lvArtists.setAdapter(mArtistListAdapter);
         lvArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ArtistInfo artist = getmArtistListAdapter().getItem(i);
+                ArtistInfo artist = mArtistListAdapter.getItem(i);
                 Log.d("artistInfoA", "artist: " + artist.artistName);
-                artistListener.onArtistSelected(artist);
+                ((OnArtistSelectedListener) getActivity()).onArtistSelected(artist);
             }
         });
         return rootView;
-    }
-
-    public interface OnArtistSelectedListener {
-        void onArtistSelected(ArtistInfo artist);
     }
 }

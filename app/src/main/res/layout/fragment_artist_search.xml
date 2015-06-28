@@ -5,22 +5,22 @@
     tools:context=".ArtistFragment">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <EditText
+            android:id="@+id/editText_artistSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_artistSearch"
-            android:text=""/>
+            android:text="" />
 
         <ListView
             android:id="@+id/listview_artist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice" />
     </LinearLayout>
 
 </FrameLayout>

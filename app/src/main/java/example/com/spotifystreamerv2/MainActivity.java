@@ -2,23 +2,23 @@ package example.com.spotifystreamerv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import example.com.spotifystreamerv2.Fragments.ArtistFragment;
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 import example.com.spotifystreamerv2.SpotifyAPI.SpotifyArtistQuery;
+import example.com.spotifystreamerv2.Fragments.ArtistFragment.OnArtistSelectedListener;
+import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment.OnTrackSelectedListener;
+import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment.OnChangeTrackListener;
 
-public class MainActivity extends AppCompatActivity implements ArtistFragment.OnArtistSelectedListener, ArtistTopTenFragment.OnTrackSelectedListener, MediaPlayerFragment.OnChangeTrackListener {
+public class MainActivity extends ActionBarActivity implements OnArtistSelectedListener, OnTrackSelectedListener, OnChangeTrackListener {
     private static final String TOPTENFRAGMENT_TAG = "TTFTAG";
     private final String TAG = "MainActivity";
     private boolean isTwoPane = false;
@@ -49,13 +49,6 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
     private void determinePaneLayout(Bundle savedInstanceState) {
         if (findViewById(R.id.container_TopTen) != null) {
             isTwoPane = true;
@@ -67,21 +60,6 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
         } else {
             isTwoPane = false;
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -112,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements ArtistFragment.On
             args.putBoolean("large", true);
             args.putString("artist", artistName);
             MediaPlayerFragment fragment = MediaPlayerFragment.newInstance();
-
             fragment.setArguments(args);
             fragment.show(getSupportFragmentManager(), "tablet");
         }

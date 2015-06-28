@@ -69,40 +69,19 @@ public class MediaPlayerFragment extends DialogFragment {
         return newInstance(true);
     }
 
+    public interface OnChangeTrackListener {
+        void onTrackSelected(int trackSelected);
+    }
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         artistName = args.getString("artist");
-        //
-        /*updateTrackTime = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int trackTime = mediaPlayer.getCurrentPosition();
-                    sb_trackSeek.setProgress(trackTime);
-                    myHandler.postDelayed(this, 100);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };*/
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnChangeTrackListener) {
-            changeTrackListener = (OnChangeTrackListener) activity;
-        } else {
-            throw new ClassCastException(
-                    activity.toString() + " must implement MediaPlayerFragment.OnChangeTrackListener"
-            );
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_media_player, container, false);
 
         tv_artist = (TextView) view.findViewById(R.id.textView_artistName);
@@ -119,6 +98,29 @@ public class MediaPlayerFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 pauseTrack(playing);
+            }
+        });
+
+        sb_trackSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int position, boolean userInput) {
+                if(mediaPlayer != null && userInput) {
+                    mediaPlayer.seekTo(position);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if(mediaPlayer != null) {
+                    mediaPlayer.pause();
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if(mediaPlayer != null) {
+                    mediaPlayer.start();
+                }
             }
         });
 
@@ -145,7 +147,7 @@ public class MediaPlayerFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 if (nextTrack()) {
-                    changeTrackListener.onTrackSelected(trackNumber + 1);
+                    ((OnChangeTrackListener) getActivity()).onTrackSelected(trackNumber + 1);
                 }
             }
         });
@@ -155,7 +157,7 @@ public class MediaPlayerFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 if (previousTrack()) {
-                    changeTrackListener.onTrackSelected(trackNumber - 1);
+                    ((OnChangeTrackListener) getActivity()).onTrackSelected(trackNumber - 1);
                 }
             }
         });
@@ -194,13 +196,11 @@ public class MediaPlayerFragment extends DialogFragment {
             updateTrackTime = new Runnable() {
                 @Override
                 public void run() {
-                    try {
+                    if(mediaPlayer != null) {
                         int trackTime = mediaPlayer.getCurrentPosition();
                         sb_trackSeek.setProgress(trackTime);
-                        myHandler.postDelayed(this, 100);
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                    myHandler.postDelayed(this, 100);
                 }
             };
         } catch (IOException e) {
@@ -257,9 +257,5 @@ public class MediaPlayerFragment extends DialogFragment {
         mediaPlayer.stop();
         wifiLock.release();
         playing = false;
-    }
-
-    public interface OnChangeTrackListener {
-        void onTrackSelected(int trackSelected);
     }
 }

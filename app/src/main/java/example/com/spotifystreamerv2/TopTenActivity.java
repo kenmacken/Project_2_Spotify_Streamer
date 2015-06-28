@@ -2,7 +2,7 @@ package example.com.spotifystreamerv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 
@@ -10,7 +10,7 @@ import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Models.ArtistInfo;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 
-public class TopTenActivity extends FragmentActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
+public class TopTenActivity extends ActionBarActivity implements ArtistTopTenFragment.OnTrackSelectedListener {
     private final String TAG = "TopTenActivity";
     private String artistName;
 
@@ -23,7 +23,7 @@ public class TopTenActivity extends FragmentActivity implements ArtistTopTenFrag
         ArtistInfo artist = (ArtistInfo) getIntent().getSerializableExtra("artist");
         artistName = artist.artistName;
         //
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
             arguments.putSerializable("artist", artist);
             ArtistTopTenFragment fragment = new ArtistTopTenFragment();

@@ -39,7 +39,7 @@ public class TopTenListAdapter extends ArrayAdapter<TrackInfo> {
         txtTrack.setText(track.trackName);
         txtAlbum.setText(track.albumName);
         if(!track.albumImgUrl.isEmpty()) {
-            Picasso.with(mContext).load(track.albumImgUrl).resize(50,50).centerCrop().into(imageView);
+            Picasso.with(mContext).load(track.albumImgUrl).resize(250,250).centerCrop().into(imageView);
         }
         return convertView;
     }

@@ -15,6 +15,11 @@
         android:layout_weight="1"
         tools:layout="@android:layout/list_content" />
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black" />
+
     <FrameLayout
         android:id="@+id/container_TopTen"
         android:layout_width="0dp"

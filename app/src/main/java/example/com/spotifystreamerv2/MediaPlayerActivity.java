@@ -2,13 +2,14 @@ package example.com.spotifystreamerv2;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import example.com.spotifystreamerv2.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamerv2.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamerv2.Models.TrackInfo;
 
-public class MediaPlayerActivity extends FragmentActivity implements MediaPlayerFragment.OnChangeTrackListener {
+public class MediaPlayerActivity extends ActionBarActivity implements MediaPlayerFragment.OnChangeTrackListener {
 
     private final String TAG = "MediaPlayerActivity";
     private String artistName;

@@ -36,7 +36,7 @@ public class ArtistListAdapter extends ArrayAdapter<ArtistInfo> {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_artist_image_view);
         txtTitle.setText(artist.artistName);
         if(!artist.artistImgUrl.isEmpty()) {
-            Picasso.with(mContext).load(artist.artistImgUrl).resize(50,50).centerCrop().into(imageView);
+            Picasso.with(mContext).load(artist.artistImgUrl).resize(250,250).centerCrop().into(imageView);
         }
         return convertView;
     }
