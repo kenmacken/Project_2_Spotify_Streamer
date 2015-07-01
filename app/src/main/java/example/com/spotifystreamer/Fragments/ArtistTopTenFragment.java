@@ -16,11 +16,17 @@ import example.com.spotifystreamer.Models.ArtistInfo;
 import example.com.spotifystreamer.Models.TrackInfo;
 import example.com.spotifystreamer.R;
 import example.com.spotifystreamer.SpotifyAPI.SpotifyArtistTopTen;
+import kaaes.spotify.webapi.android.models.Tracks;
 
 public class ArtistTopTenFragment extends Fragment {
 
     private static ArrayList<TrackInfo> arrayOfTracks = new ArrayList<>();
+    private static ArrayList<Tracks> listOfTracks = new ArrayList<>();
     private static TopTenListAdapter mTopTenListAdapter;
+
+    public static ArrayList<Tracks> getListOfTracks() {
+        return listOfTracks;
+    }
 
     public interface OnTrackSelectedListener {
         void onTrackSelected(int trackSelected);
@@ -54,6 +60,7 @@ public class ArtistTopTenFragment extends Fragment {
                 ((OnTrackSelectedListener) getActivity()).onTrackSelected(i);
             }
         });
+        Log.d("Tracklist", "tracks: " + listOfTracks);
         return rootView;
     }
 }

@@ -3,6 +3,7 @@ package example.com.spotifystreamer.SpotifyAPI;
 import android.os.AsyncTask;
 
 import java.util.HashMap;
+import java.util.List;
 
 import example.com.spotifystreamer.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamer.Models.TrackInfo;
@@ -36,6 +37,8 @@ public class SpotifyArtistTopTen extends AsyncTask<String, Void, Tracks> {
     protected void onPostExecute(Tracks tracks) {
         try {
             Tracks topTenTracks = tracks;
+            ArtistTopTenFragment.getListOfTracks().clear();
+            ArtistTopTenFragment.getListOfTracks().add(topTenTracks);
             String trackName;
             String albumName;
             String trackId;
