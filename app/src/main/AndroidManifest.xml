@@ -26,6 +26,8 @@
         <activity
             android:name="example.com.spotifystreamer.MediaPlayerActivity"
             android:label="Media Player" />
+        
+        <service android:name=".Services.MusicService" />
 
     </application>
 

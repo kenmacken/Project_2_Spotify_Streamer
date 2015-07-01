@@ -2,6 +2,8 @@ package example.com.spotifystreamer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +15,7 @@ import example.com.spotifystreamer.Fragments.ArtistTopTenFragment;
 import example.com.spotifystreamer.Fragments.MediaPlayerFragment;
 import example.com.spotifystreamer.Models.ArtistInfo;
 import example.com.spotifystreamer.Models.TrackInfo;
+import example.com.spotifystreamer.Services.MusicService;
 import example.com.spotifystreamer.SpotifyAPI.SpotifyArtistQuery;
 import example.com.spotifystreamer.Fragments.ArtistFragment.OnArtistSelectedListener;
 import example.com.spotifystreamer.Fragments.ArtistTopTenFragment.OnTrackSelectedListener;
@@ -51,13 +54,23 @@ public class MainActivity extends AppCompatActivity implements OnArtistSelectedL
         });
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
     private void determinePaneLayout(Bundle savedInstanceState) {
         if (findViewById(R.id.container_TopTen) != null) {
             isTwoPane = true;
             if (savedInstanceState == null) {
+                Log.d(TAG, "new");
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_TopTen, new ArtistTopTenFragment(), TOPTENFRAGMENT_TAG)
+                        .add(R.id.container_TopTen, new ArtistTopTenFragment(), TOPTENFRAGMENT_TAG)
                         .commit();
+            } else {
+                Log.d(TAG, "already exists");
+                return;
             }
         } else {
             isTwoPane = false;
@@ -71,11 +84,18 @@ public class MainActivity extends AppCompatActivity implements OnArtistSelectedL
             getSupportActionBar().setSubtitle(artistName);
             Bundle args = new Bundle();
             args.putSerializable("artist", artist);
-            ArtistTopTenFragment fragment = new ArtistTopTenFragment();
-            fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_TopTen, fragment, TOPTENFRAGMENT_TAG)
-                    .commit();
+            //
+            FragmentManager fm = getSupportFragmentManager();
+            if(fm.findFragmentByTag(TOPTENFRAGMENT_TAG) != null) {
+                ArtistTopTenFragment fragment = new ArtistTopTenFragment();
+                fragment.setArguments(args);
+                Log.d(TAG, "replace top tracks frag");
+                fm.beginTransaction()
+                        .replace(R.id.container_TopTen, fragment, TOPTENFRAGMENT_TAG)
+                        .commit();
+            } else {
+                Log.d(TAG, "top tracks frag already exists");
+            }
         } else {
             Intent intent = new Intent(this, TopTenActivity.class);
             intent.putExtra("artist", artist);
@@ -88,13 +108,18 @@ public class MainActivity extends AppCompatActivity implements OnArtistSelectedL
         TrackInfo track = ArtistTopTenFragment.getmTopTenListAdapter().getItem(trackNumber);
         Log.d(TAG, "track selected");
         if (isTwoPane) {
-            Bundle args = new Bundle();
-            args.putSerializable("track", track);
-            args.putBoolean("large", true);
-            args.putString("artist", artistName);
-            MediaPlayerFragment fragment = MediaPlayerFragment.newInstance();
-            fragment.setArguments(args);
-            fragment.show(getSupportFragmentManager(), "tablet");
+            FragmentManager fm = getSupportFragmentManager();
+            if(fm.findFragmentByTag("tablet") == null) {
+                Log.d(TAG, "create dialog");
+                Bundle args = new Bundle();
+                args.putSerializable("track", track);
+                args.putString("artist", artistName);
+                MediaPlayerFragment fragment = MediaPlayerFragment.newInstance();
+                fragment.setArguments(args);
+                fragment.show(getSupportFragmentManager(), "tablet");
+            } else {
+                Log.d(TAG, "dialog already exists");
+            }
         }
     }
 }

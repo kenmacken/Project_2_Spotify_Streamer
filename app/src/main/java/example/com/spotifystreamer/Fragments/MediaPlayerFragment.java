@@ -1,7 +1,11 @@
 package example.com.spotifystreamer.Fragments;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.DialogFragment;
 import android.media.MediaPlayer;
@@ -25,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 import example.com.spotifystreamer.Models.TrackInfo;
 import example.com.spotifystreamer.R;
+import example.com.spotifystreamer.Services.MusicService;
+import example.com.spotifystreamer.Services.MusicService.MusicBinder;
 
 public class MediaPlayerFragment extends DialogFragment {
 
@@ -51,6 +57,10 @@ public class MediaPlayerFragment extends DialogFragment {
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private WifiManager.WifiLock wifiLock;
     private Runnable updateTrackTime;
+    //
+    private MusicService mMussicService;
+    private Intent playerIntent;
+    private boolean musicBound = false;
 
     public static MediaPlayerFragment newInstance(boolean showAsDialog) {
         MediaPlayerFragment fragment = new MediaPlayerFragment();
@@ -89,7 +99,8 @@ public class MediaPlayerFragment extends DialogFragment {
         btn_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pauseTrack(playing);
+                //pauseTrack(playing);
+                mMussicService.pauseTrack(mMussicService.isPlaying());
             }
         });
 
@@ -131,7 +142,12 @@ public class MediaPlayerFragment extends DialogFragment {
             tv_track.setText(trackName);
             tv_album.setText(albumName);
             Picasso.with(getActivity()).load(albumImgUrl).resize(640, 640).centerCrop().into(iv_albumImage);
-            playTrack(previewUrl);
+            //playTrack(previewUrl);
+            //
+            playerIntent = new Intent(getActivity(), MusicService.class);
+            playerIntent.putExtra("SONG_URL", previewUrl);
+            getActivity().bindService(playerIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            getActivity().startService(playerIntent);
         }
 
         btn_next = (Button) view.findViewById(R.id.button_next);
@@ -158,68 +174,26 @@ public class MediaPlayerFragment extends DialogFragment {
 
     @Override
     public void onDestroy() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-            if (wifiLock.isHeld()) {
-                wifiLock.release();
-            }
-        }
         super.onDestroy();
     }
 
-    private void playTrack(String songUrl) {
-        try {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(songUrl);
-            mediaPlayer.setWakeMode(getActivity(), PowerManager.PARTIAL_WAKE_LOCK);
-            wifiLock = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
-            wifiLock.acquire();
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    sb_trackSeek.setMax(mediaPlayer.getDuration());
-                    tv_trackEnd.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()), TimeUnit.MILLISECONDS.toSeconds(mediaPlayer.getDuration())));
-                    pauseTrack(false);
-
-                }
-            });
-            mediaPlayer.prepareAsync();
-            updateTrackTime = new Runnable() {
-                @Override
-                public void run() {
-                    if(mediaPlayer != null) {
-                        int trackTime = mediaPlayer.getCurrentPosition();
-                        sb_trackSeek.setProgress(trackTime);
-                    }
-                    myHandler.postDelayed(this, 100);
-                }
-            };
-        } catch (IOException e) {
-            //
-            playing = false;
-            wifiLock.release();
+    private ServiceConnection musicConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MusicBinder binder = (MusicBinder)iBinder;
+            mMussicService = binder.getService();
+            musicBound = true;
         }
-    }
 
-    private void pauseTrack(boolean pause) {
-        if (pause) {
-            mediaPlayer.pause();
-            wifiLock.release();
-            playing = false;
-            btn_play_pause.setBackgroundResource(android.R.drawable.ic_media_play);
-        } else {
-            mediaPlayer.start();
-            wifiLock.acquire();
-            playing = true;
-            btn_play_pause.setBackgroundResource(android.R.drawable.ic_media_pause);
-            myHandler.postDelayed(updateTrackTime, 100);
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            musicBound = false;
         }
-    }
+    };
 
     private boolean nextTrack() {
         if (ArtistTopTenFragment.getmTopTenListAdapter().getCount() > trackNumber + 1) {
-            stopTrack();
+            mMussicService.stopTrack();
             try {
                 getDialog().dismiss();
             } catch (Exception e) {
@@ -233,7 +207,7 @@ public class MediaPlayerFragment extends DialogFragment {
 
     private boolean previousTrack() {
         if (trackNumber > 0) {
-            stopTrack();
+            mMussicService.stopTrack();
             try {
                 getDialog().dismiss();
             } catch (Exception e) {
