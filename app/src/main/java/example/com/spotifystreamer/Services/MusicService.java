@@ -77,6 +77,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     private void setupMediaPlayer(String songUrl) {
+        if(mMediaPlayer != null) {
+            mMediaPlayer.release();
+        }
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
